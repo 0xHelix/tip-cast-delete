@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { NeynarAPIClient, isApiErrorResponse } from "@neynar/nodejs-sdk";
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 
-dotenv.config({ path: './../../../../.env.local' });
+// dotenv.config({ path: './../../../../.env.local' });
 
 const client = new NeynarAPIClient(process.env.NEYNAR_API_KEY!);
 
@@ -84,7 +84,7 @@ export async function DELETE(request: NextRequest) {
       { status: 200 }
     );
   } catch (err) {
-    console.error("Error deleting casts:", err); // Improved logging
+    console.error("Error deleting casts:", err);
     if (isApiErrorResponse(err)) {
       return NextResponse.json(
         { ...err.response.data },
