@@ -126,14 +126,14 @@ export default function Home() {
               className="w-full mt-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition-colors duration-200 ease-in-out"
               disabled={searchLoading}
             >
-              {searchLoading ? "Searching..." : "Search"}
+              {searchLoading ? "Searching casts..." : "Search for $DEGEN casts"}
             </button>
             <button
               onClick={handleDeleteCast}
               className="w-full mt-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 transition-colors duration-200 ease-in-out"
               disabled={deleteLoading || matches.length === 0}
             >
-              {deleteLoading ? "Deleting..." : "Delete"}
+              {deleteLoading ? "Deleting casts..." : "Delete $DEGEN casts"}
             </button>
             {deleteResult !== null && (
               <p className="mt-4 text-lg font-semibold text-center text-black">
