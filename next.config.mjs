@@ -1,11 +1,11 @@
-// next.config.js
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    reactStrictMode: true,
-    images: {
-      domains: ['occb0ofnixhvqbrv.public.blob.vercel-storage.com'],
-    },
-  };
-  
-  export default nextConfig;
-  
+// next.config.mjs
+export default {
+  reactStrictMode: true,
+  images: {
+    domains: ['occb0ofnixhvqbrv.public.blob.vercel-storage.com'],
+  },
+  env: {
+    NEYNAR_API_KEY: process.env.NEYNAR_API_KEY,
+    NEXT_PUBLIC_NEYNAR_CLIENT_ID: process.env.NEXT_PUBLIC_NEYNAR_CLIENT_ID,
+  },
+};

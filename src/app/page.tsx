@@ -47,7 +47,7 @@ export default function Home() {
       .filter(cast => new Date(cast.timestamp) < new Date("2024-04-30T23:59:59Z"))
       .map(cast => cast.hash);
 
-    console.log("Casts to delete:", castHashes);
+    // console.log("Casts to delete:", castHashes);
 
     if (castHashes.length === 0) {
       alert("No casts found to delete.");
