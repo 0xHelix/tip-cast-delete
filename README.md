@@ -1,27 +1,27 @@
-# Neynar Microservice App
+# Neynar Microservice App 🚀
 
 ## Overview
 
 This microservice application integrates with the Neynar API to publish, search, and delete $DEGEN tip casts from previous seasons. It is built using Next.js and leverages the Neynar SDK for interacting with the Neynar platform.
 
-## Features
+## Features ✨
 
 - Publish casts to Farcaster
 - Search for specific casts based on patterns
 - Delete casts based on criteria - e.g. 10 $DEGEN, posted before 30th April 2024
 
-## Tech Stack
+## Tech Stack 🛠️
 
 - **Backend:** Node.js, Next.js
 - **Frontend:** React, Next.js
 - **Authentication:** Neynar SDK
 
-## Prerequisites
+## Prerequisites 📋
 
 - Node.js 14+
 - Neynar account and API key
 
-## Installation
+## Installation ⚙️
 
 1. **Clone the repository**
     ```sh
@@ -46,7 +46,7 @@ This microservice application integrates with the Neynar API to publish, search,
     npm run dev
     ```
 
-## API Endpoints
+## API Endpoints 📝
 
 ### Publish Cast
 
@@ -111,9 +111,9 @@ This microservice application integrates with the Neynar API to publish, search,
     }
     ```
 
-## Frontend
+## Frontend 🌐
 
-The frontend of the application is a simple React component that uses the Neynar authentication context to allow users to publish, search, and delete casts.
+The frontend of the application is a simple React component that uses the Neynar authentication context to allow users to publish, search, and delete casts. As you may be able to tell, I am no front end designer! 
 
 ### Usage
 
@@ -121,13 +121,8 @@ The frontend of the application is a simple React component that uses the Neynar
 2. **Publish Cast:** Enter text and click "Cast"
 3. **Search Casts:** Click "Search"
 4. **Delete Casts:** Click "Delete"
-    ```
 
-## License
-
-This project is licensed under the MIT License.
-
-## Acknowledgements
+## Acknowledgements 🙏
 
 - Neynar for providing the API and SDK.
 - Next.js for the framework.
