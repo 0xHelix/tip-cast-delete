@@ -1,36 +1,133 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Neynar Microservice App
 
-## Getting Started
+## Overview
 
-First, run the development server:
+This microservice application integrates with the Neynar API to publish, search, and delete $DEGEN tip casts from previous seasons. It is built using Next.js and leverages the Neynar SDK for interacting with the Neynar platform.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Publish casts to Farcaster
+- Search for specific casts based on patterns
+- Delete casts based on criteria - e.g. 10 $DEGEN, posted before 30th April 2024
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Backend:** Node.js, Next.js
+- **Frontend:** React, Next.js
+- **Authentication:** Neynar SDK
 
-## Learn More
+## Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js 14+
+- Neynar account and API key
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. **Clone the repository**
+    ```sh
+    git clone https://github.com/0xHelix/tip-cast-delete.git
+    cd tip-cast-delete
+    ```
 
-## Deploy on Vercel
+2. **Install dependencies**
+    ```sh
+    npm install
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Set up environment variables**
+    Create a `.env.local` file in the root directory and add the following:
+    ```env
+    NEYNAR_API_KEY=your_neynar_api_key
+    NEXT_PUBLIC_NEYNAR_CLIENT_ID=your_neynar_app_id
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+4. **Run the application**
+    ```sh
+    npm run dev
+    ```
+
+## API Endpoints
+
+### Publish Cast
+
+- **URL:** `/api/cast`
+- **Method:** `POST`
+- **Request Body:**
+    ```json
+    {
+      "signerUuid": "string",
+      "text": "string"
+    }
+    ```
+- **Response:**
+    ```json
+    {
+      "message": "Cast with hash {hash} published successfully"
+    }
+    ```
+
+### Search Casts
+
+- **URL:** `/api/cast`
+- **Method:** `POST`
+- **Request Body:**
+    ```json
+    {
+      "action": "search",
+      "fid": "number",
+      "pattern": "string",
+      "deleteBefore": "string (ISO Date)"
+    }
+    ```
+- **Response:**
+    ```json
+    {
+      "totalMatches": "number",
+      "deletableMatches": "number",
+      "matches": [
+        {
+          "hash": "string",
+          "timestamp": "string (ISO Date)"
+        }
+      ]
+    }
+    ```
+
+### Delete Casts
+
+- **URL:** `/api/cast`
+- **Method:** `DELETE`
+- **Request Body:**
+    ```json
+    {
+      "signerUuid": "string",
+      "castHashes": ["string"]
+    }
+    ```
+- **Response:**
+    ```json
+    {
+      "message": "Casts deleted successfully"
+    }
+    ```
+
+## Frontend
+
+The frontend of the application is a simple React component that uses the Neynar authentication context to allow users to publish, search, and delete casts.
+
+### Usage
+
+1. **Login with Neynar**
+2. **Publish Cast:** Enter text and click "Cast"
+3. **Search Casts:** Click "Search"
+4. **Delete Casts:** Click "Delete"
+    ```
+
+## License
+
+This project is licensed under the MIT License.
+
+## Acknowledgements
+
+- Neynar for providing the API and SDK.
+- Next.js for the framework.
