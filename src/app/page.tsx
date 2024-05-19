@@ -96,64 +96,65 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-gray-100">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6 space-y-6">
-        <NeynarAuthButton />
-  
-        {user && (
-          <>
-            <div className="flex items-center gap-4">
-              {user.pfp_url && (
-                <Image
-                  src={user.pfp_url}
-                  width={50}
-                  height={50}
-                  alt="User Profile Picture"
-                  className="rounded-full"
-                />
-              )}
-              <p className="text-xl font-semibold">{user?.display_name}</p>
-            </div>
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder="Spread the word!"
-              rows={3}
-              className="w-full p-2 mt-4 rounded-md border border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black placeholder-gray-500"
+  <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6 space-y-6">
+    <NeynarAuthButton />
+
+    {user && (
+      <>
+        <div className="flex items-center gap-4">
+          {user.pfp_url && (
+            <Image
+              src={user.pfp_url}
+              width={50}
+              height={50}
+              alt="User Profile Picture"
+              className="rounded-full"
             />
-            <button
-              onClick={handlePublishCast}
-              className="w-full mt-4 py-2 bg-indigo-500 text-white rounded-md shadow-md hover:bg-indigo-600 transition-colors duration-200 ease-in-out"
-            >
-              Cast
-            </button>
-            <button
-              onClick={handleSearchCasts}
-              className="w-full mt-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition-colors duration-200 ease-in-out"
-              disabled={searchLoading}
-            >
-              {searchLoading ? 'Searching...' : 'Search'}
-            </button>
-            <button
-              onClick={handleDeleteCast}
-              className="w-full mt-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 transition-colors duration-200 ease-in-out"
-              disabled={deleteLoading || matches.length === 0}
-            >
-              {deleteLoading ? 'Deleting...' : 'Delete'}
-            </button>
-            {deleteResult !== null && (
-              <p className="mt-4 text-lg font-semibold text-center">
-                Number of casts deleted: {deleteResult}
-              </p>
-            )}
-            {matches.length > 0 && (
-              <p className="mt-4 text-lg font-semibold text-center">
-                Number of $DEGEN casts: {totalMatches}<br/>
-                Number of deletable casts: {deletableMatches}
-              </p>
-            )}
-          </>
+          )}
+          <p className="text-xl font-semibold">{user?.display_name}</p>
+        </div>
+        <button
+          onClick={handleSearchCasts}
+          className="w-full mt-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition-colors duration-200 ease-in-out"
+          disabled={searchLoading}
+        >
+          {searchLoading ? 'Searching...' : 'Search for $DEGEN casts'}
+        </button>
+        <button
+          onClick={handleDeleteCast}
+          className="w-full mt-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 transition-colors duration-200 ease-in-out"
+          disabled={deleteLoading || matches.length === 0}
+        >
+          {deleteLoading ? 'Deleting...' : 'Delete $DEGEN casts'}
+        </button>
+        {deleteResult !== null && (
+          <p className="mt-4 text-lg font-semibold text-center">
+            Number of casts deleted: {deleteResult}
+          </p>
         )}
-      </div>
-    </main>
+        {matches.length > 0 && (
+          <p className="mt-4 text-lg font-semibold text-center">
+            Number of $DEGEN casts: {totalMatches}<br />
+            Number of deletable casts: {deletableMatches}
+          </p>
+        )}
+        <textarea
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Did it work? Cast to FC and share!"
+          rows={3}
+          className="w-full p-2 mt-4 rounded-md border border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black placeholder-gray-500"
+        />
+        <button
+          onClick={handlePublishCast}
+          className="w-full mt-4 py-2 bg-indigo-500 text-white rounded-md shadow-md hover:bg-indigo-600 transition-colors duration-200 ease-in-out"
+        >
+          Cast
+        </button>
+      </>
+    )}
+  </div>
+</main>
+
   );
 }
