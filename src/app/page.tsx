@@ -25,7 +25,6 @@ export default function Home() {
   const [totalMatches, setTotalMatches] = useState<number>(0);
   const [deletableMatches, setDeletableMatches] = useState<number>(0);
 
-
   const handlePublishCast = async () => {
     try {
       await axios.post<{ message: string }>("/api/cast", {
@@ -44,8 +43,10 @@ export default function Home() {
     if (!user) return;
 
     const castHashes = matches
-      .filter(cast => new Date(cast.timestamp) < new Date("2024-04-30T23:59:59Z"))
-      .map(cast => cast.hash);
+      .filter(
+        (cast) => new Date(cast.timestamp) < new Date("2024-04-30T23:59:59Z")
+      )
+      .map((cast) => cast.hash);
 
     // console.log("Casts to delete:", castHashes);
 
@@ -58,12 +59,12 @@ export default function Home() {
     setDeleteResult(null);
 
     try {
-      const response = await axios.delete('/api/cast', {
-        data: { signerUuid: user?.signer_uuid, castHashes }
+      const response = await axios.delete("/api/cast", {
+        data: { signerUuid: user?.signer_uuid, castHashes },
       });
       console.log("Delete response:", response.data);
       setDeleteResult(castHashes.length);
-      setMatches(matches.filter(cast => !castHashes.includes(cast.hash)));
+      setMatches(matches.filter((cast) => !castHashes.includes(cast.hash)));
     } catch (err) {
       console.error("Error deleting casts:", err);
       alert("Error deleting casts");
@@ -74,16 +75,21 @@ export default function Home() {
 
   const handleSearchCasts = async () => {
     if (!user) return;
-  
+
     const fid = user.fid;
     const pattern = "^\\d+\\s\\$DEGEN$";
     const deleteBefore = "2024-04-30T23:59:59Z";
-  
+
     setSearchLoading(true);
     setMatches([]);
-  
+
     try {
-      const response = await axios.post('/api/cast', { action: 'search', fid, pattern, deleteBefore });
+      const response = await axios.post("/api/cast", {
+        action: "search",
+        fid,
+        pattern,
+        deleteBefore,
+      });
       setMatches(response.data.matches);
       setTotalMatches(response.data.totalMatches);
       setDeletableMatches(response.data.deletableMatches);
@@ -96,65 +102,67 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-gray-100">
-  <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6 space-y-6">
-    <NeynarAuthButton />
+      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6 space-y-6">
+        <NeynarAuthButton />
 
-    {user && (
-      <>
-        <div className="flex items-center gap-4">
-          {user.pfp_url && (
-            <Image
-              src={user.pfp_url}
-              width={50}
-              height={50}
-              alt="User Profile Picture"
-              className="rounded-full"
+        {user && (
+          <>
+            <div className="flex items-center gap-4">
+              {user.pfp_url && (
+                <Image
+                  src={user.pfp_url}
+                  width={50}
+                  height={50}
+                  alt="User Profile Picture"
+                  className="rounded-full"
+                />
+              )}
+              <p className="text-xl font-semibold text-black">
+                {user?.display_name}
+              </p>
+            </div>
+            <button
+              onClick={handleSearchCasts}
+              className="w-full mt-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition-colors duration-200 ease-in-out"
+              disabled={searchLoading}
+            >
+              {searchLoading ? "Searching..." : "Search"}
+            </button>
+            <button
+              onClick={handleDeleteCast}
+              className="w-full mt-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 transition-colors duration-200 ease-in-out"
+              disabled={deleteLoading || matches.length === 0}
+            >
+              {deleteLoading ? "Deleting..." : "Delete"}
+            </button>
+            {deleteResult !== null && (
+              <p className="mt-4 text-lg font-semibold text-center text-black">
+                Number of casts deleted: {deleteResult}
+              </p>
+            )}
+            {matches.length > 0 && (
+              <p className="mt-4 text-lg font-semibold text-center text-black">
+                Number of $DEGEN casts: {totalMatches}
+                <br />
+                Number of deletable casts: {deletableMatches}
+              </p>
+            )}
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Did it work? Cast to FC and share!"
+              rows={3}
+              className="w-full p-2 mt-4 rounded-md border border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black placeholder-gray-500"
             />
-          )}
-          <p className="text-xl font-semibold">{user?.display_name}</p>
-        </div>
-        <button
-          onClick={handleSearchCasts}
-          className="w-full mt-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition-colors duration-200 ease-in-out"
-          disabled={searchLoading}
-        >
-          {searchLoading ? 'Searching...' : 'Search for $DEGEN casts'}
-        </button>
-        <button
-          onClick={handleDeleteCast}
-          className="w-full mt-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 transition-colors duration-200 ease-in-out"
-          disabled={deleteLoading || matches.length === 0}
-        >
-          {deleteLoading ? 'Deleting...' : 'Delete $DEGEN casts'}
-        </button>
-        {deleteResult !== null && (
-          <p className="mt-4 text-lg font-semibold text-center">
-            Number of casts deleted: {deleteResult}
-          </p>
+            <button
+              onClick={handlePublishCast}
+              className="w-full mt-4 py-2 bg-indigo-500 text-white rounded-md shadow-md hover:bg-indigo-600 transition-colors duration-200 ease-in-out"
+            >
+              Cast
+            </button>
+          </>
         )}
-        {matches.length > 0 && (
-          <p className="mt-4 text-lg font-semibold text-center">
-            Number of $DEGEN casts: {totalMatches}<br />
-            Number of deletable casts: {deletableMatches}
-          </p>
-        )}
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Did it work? Cast to FC and share!"
-          rows={3}
-          className="w-full p-2 mt-4 rounded-md border border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black placeholder-gray-500"
-        />
-        <button
-          onClick={handlePublishCast}
-          className="w-full mt-4 py-2 bg-indigo-500 text-white rounded-md shadow-md hover:bg-indigo-600 transition-colors duration-200 ease-in-out"
-        >
-          Cast
-        </button>
-      </>
-    )}
-  </div>
-</main>
-
+      </div>
+    </main>
   );
 }
