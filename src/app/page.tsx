@@ -160,6 +160,14 @@ export default function Home() {
             >
               Cast
             </button>
+            <a
+              href="https://www.farcaster.id/h3lx.eth"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block mt-4 text-center text-blue-500 hover:underline"
+            >
+             Follow me on Farcaster! @h3lx.eth
+            </a>
           </>
         )}
       </div>
