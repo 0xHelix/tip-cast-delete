@@ -24,6 +24,11 @@ export default function Home() {
   const [deleteResult, setDeleteResult] = useState<number | null>(null);
   const [totalMatches, setTotalMatches] = useState<number>(0);
   const [deletableMatches, setDeletableMatches] = useState<number>(0);
+  const [noMatchesFound, setNoMatchesFound] = useState<boolean>(false);
+
+
+  const deleteBefore = "2024-05-29T23:59:59Z";
+  const [deleteBeforeDate] = useState(new Date(deleteBefore));
 
   const handlePublishCast = async () => {
     try {
@@ -44,7 +49,7 @@ export default function Home() {
 
     const castHashes = matches
       .filter(
-        (cast) => new Date(cast.timestamp) < new Date("2024-04-30T23:59:59Z")
+        (cast) => new Date(cast.timestamp) < new Date(deleteBefore)
       )
       .map((cast) => cast.hash);
 
@@ -77,11 +82,11 @@ export default function Home() {
     if (!user) return;
 
     const fid = user.fid;
-    const pattern = "^\\d+\\s\\$DEGEN$";
-    const deleteBefore = "2024-04-30T23:59:59Z";
+    const pattern = "\\d+\\s\\$[dD][eE][gG][eE][nN]";
 
     setSearchLoading(true);
     setMatches([]);
+    setNoMatchesFound(false);
 
     try {
       const response = await axios.post("/api/cast", {
@@ -93,6 +98,9 @@ export default function Home() {
       setMatches(response.data.matches);
       setTotalMatches(response.data.totalMatches);
       setDeletableMatches(response.data.deletableMatches);
+      if (matches.length === 0) {
+        setNoMatchesFound(true)
+      }
     } catch (err) {
       alert("Error searching casts");
     } finally {
@@ -121,6 +129,9 @@ export default function Home() {
                 {user?.display_name}
               </p>
             </div>
+            <p className="text-sm text-gray-500 text-center mt-2">
+              Clear out your feed and save storage! Use the buttons below to search your casts and delete any $DEGEN tips created before {deleteBeforeDate.toLocaleDateString()}, in line with the end of the previous season.
+            </p>
             <button
               onClick={handleSearchCasts}
               className="w-full mt-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition-colors duration-200 ease-in-out"
@@ -140,19 +151,25 @@ export default function Home() {
                 Number of casts deleted: {deleteResult}
               </p>
             )}
-            {matches.length > 0 && (
+            {matches.length > 0 ? (
               <p className="mt-4 text-lg font-semibold text-center text-black">
                 Number of $DEGEN casts: {totalMatches}
                 <br />
                 Number of deletable casts: {deletableMatches}
               </p>
+            ) : (
+              noMatchesFound && (
+                <p className="mt-4 text-lg font-semibold text-center text-black">
+                  No $DEGEN casts found.
+                </p>
+              )
             )}
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Did it work? Cast to FC and share!"
-              rows={3}
-              className="w-full p-2 mt-4 rounded-md border border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black placeholder-gray-500"
+              rows={2}
+              className="w-full p-2 mt-4 rounded-md border text-center border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black placeholder-gray-500"
             />
             <button
               onClick={handlePublishCast}
@@ -166,7 +183,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="block mt-4 text-center text-blue-500 hover:underline"
             >
-             Follow me on Farcaster! @h3lx.eth
+              Follow me on Farcaster! @h3lx.eth
             </a>
           </>
         )}
